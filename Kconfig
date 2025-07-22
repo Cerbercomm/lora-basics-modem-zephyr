@@ -1,0 +1,4 @@
+# ** Lora Basic Modem root kernel configuration **
+
+# Drivers specific (Lora PHY) kernel configuration
+rsource "drivers/Kconfig"

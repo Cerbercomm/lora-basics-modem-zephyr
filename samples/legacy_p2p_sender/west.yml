@@ -1,0 +1,19 @@
+# T2 west.yml, using manifest imports.
+manifest:
+  self:
+    path: app
+
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: lora-basic-modem
+      url: https://github.com/Lora-net/SWL2001
+      path: modules/lib/lora-basics-modem
+      revision: master
+      
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: main
+      import: true

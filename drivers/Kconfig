@@ -1,0 +1,70 @@
+# ** Lora Basic Modem drivers (loRa PHY) kernel configuration **
+
+# Enable PHY layer
+menuconfig LORA_BASICS_MODEM
+        bool "LoRa basics modem PHY Support"
+        select EXPERIMENTAL
+        depends on !LORA
+        help
+          Include support for LoRa (Long Range) PHY layer
+
+if LORA_BASICS_MODEM
+
+# Logging support for namespace
+module = LORA_BASICS_MODEM
+module-str = lora-basics-modem
+source "subsys/logging/Kconfig.template.log_config"
+
+config LORA_BASICS_MODEM_INIT_PRIORITY
+        int "LoRa initialization priority"
+        default 90
+        help
+          System initialization priority for LoRa drivers.
+
+config LORA_BASICS_MODEM_P2P_API
+        bool "Add support for P2P API"
+        default y
+        help
+          Support P2P API
+
+if LORA_BASICS_MODEM_P2P_API
+choice LORA_BASICS_MODEM_P2P_API_TYPE
+        prompt "P2P API type"
+        default LORA_BASICS_MODEM_P2P_API_MODERN
+        help
+          Which Lora P2P API driver to use
+        
+config LORA_BASICS_MODEM_P2P_API_LEGACY
+        bool "Legacy P2P API"
+        depends on POLL
+        help
+          Support legacy P2P driver API introduced in the lorawan-mac module
+
+config LORA_BASICS_MODEM_P2P_API_MODERN
+        bool "LBM (Lora Basics Modem) P2P API"
+        help
+          Support LBM (Lora Basics Modem) P2P driver API
+
+endchoice
+endif # LORA_BASICS_MODEM_P2P_API
+
+config LORA_BASICS_MODEM_BOOST_RX
+        bool "Boost Rx in LoRa reception"
+        default y
+        help
+          Boost LoRa Rx in the expense of extra power consumed
+
+# We need this enabled to use LoRa WAN stack
+#   specific drivers with met dependencies will select this
+config HAS_LORA_BASICS_MODEM_RADIO_DRIVER
+        bool
+
+# Logging support for drivers
+module = LORA_BASICS_MODEM_DRIVER
+module-str = lora-basics-modem-driver
+source "subsys/logging/Kconfig.template.log_config"
+
+# Configuration specific to Semtech SX12XX
+rsource "sx126x/Kconfig"
+
+endif # LORA_BASICS_MODEM

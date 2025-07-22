@@ -1,0 +1,12 @@
+# ** Lora Basic Modem drivers (loRa PHY) kernel configuration **
+#      Semtech sx12XX specific
+
+config LORA_BASICS_MODEM_SX126X
+        bool "Semtech SX126x driver"
+        default y
+        depends on DT_HAS_SEMTECH_SX1261_ENABLED || DT_HAS_SEMTECH_SX1262_ENABLED || DT_HAS_SEMTECH_SX1268_ENABLED
+        depends on SPI
+        depends on GPIO
+        select HAS_LORA_BASICS_MODEM_RADIO_DRIVER
+        help
+          Enable driver for Semtech SX1261 and SX1262.
