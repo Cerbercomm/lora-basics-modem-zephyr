@@ -144,6 +144,10 @@ static int sx126x_init(const struct device *dev) {
 
 /* Driver API
 */
+static uint32_t sx126x_driver_get_mtu(const struct device *dev) {
+	return 255;
+}
+
 static int sx126x_driver_send(const struct device *dev, uint8_t *data, uint32_t data_len) {
     const struct sx126x_hal_config_t *config = dev->config;
     int ret;
@@ -217,6 +221,7 @@ static const struct sx126x_hal_config_t sx126x_config_lora = {
 };
 
 static DEVICE_API(lbm, sx126x_lora_api) = {
+    .get_mtu       = sx126x_driver_get_mtu,
     .set_frequency = ral_driver_set_frequency,
     .set_mod_param = ral_driver_set_mod_param,
     .set_pkt_param = ral_driver_set_pkt_param,

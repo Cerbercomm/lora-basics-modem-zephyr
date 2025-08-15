@@ -257,6 +257,8 @@ int ral_driver_send(const struct device *dev, uint8_t *data, uint32_t data_len) 
     struct ralf_hal_config_t *hal_config = dev->data;
     ral_status_t status;
 
+    //LOG_HEXDUMP_INF(data, data_len, "Outgoing packet");
+
     // we're interested in successful send
     ral_irq_t irq = RAL_IRQ_TX_DONE;
     status = ral_set_dio_irq_params(&hal_config->modem_radio.ral, irq);
@@ -304,7 +306,7 @@ int ral_driver_send(const struct device *dev, uint8_t *data, uint32_t data_len) 
         return -EINVAL;
     }
 
-    LOG_DBG("ral_driver_send() done");
+    LOG_DBG("ral_driver_send(%d) done", data_len);
     
     return 0;
 }
@@ -363,9 +365,11 @@ int ral_driver_recv(const struct device *dev, uint8_t *data, uint8_t size, k_tim
         &size_in_bytes);
 
     if (status != RAL_STATUS_OK) {
-        LOG_ERR("ral_get_pkt_payload() returned: %d", status);
+        LOG_ERR("ral_get_pkt_payload(size = %d) returned: %d", size, status);
         return -EINVAL;
     }
+
+    //LOG_HEXDUMP_INF(data, size_in_bytes, "Incoming packet");
 
     return size_in_bytes;
 }
